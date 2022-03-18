@@ -13,15 +13,16 @@ public class UserManager {
     private Connection connection = DBConnectionProvider.getInstance().getConnection();
 
     public void add(User user) {
-        String sql1 = "INSERT INTO user(name,surname,email,password,type) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO user(name,surname,email,password,type,picture_url) VALUES(?,?,?,?,?,?)";
 
         try {
-            PreparedStatement ps = connection.prepareStatement(sql1, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getName());
             ps.setString(2, user.getSurname());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getPassword());
-            ps.setString(5, Type.USER.name());
+            ps.setString(5, user.getType().name());
+            ps.setString(6, user.getPictureUrl());
             ps.executeUpdate();
             ResultSet resultSet = ps.getGeneratedKeys();
             if (resultSet.next()) {
@@ -52,22 +53,31 @@ public class UserManager {
         return null;
     }
 
+
     public List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM user WHERE type = 'USER'";
+        String sql = "SELECT * FROM user";
+        List<User> result = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                users.add(getUserFromResultSet(resultSet));
+                result.add(getUserFromResultSet(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return users;
+        return result;
     }
 
-
+    public void deleteUserById(int id) {
+        String sql = "DELETE FROM user where id = " + id;
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     private User getUserFromResultSet(ResultSet resultSet) {
         try {
@@ -78,6 +88,7 @@ public class UserManager {
                     .email(resultSet.getString(4))
                     .password(resultSet.getString(5))
                     .type(Type.valueOf(resultSet.getString(6)))
+                    .pictureUrl(resultSet.getString(7))
                     .build();
         } catch (SQLException e) {
             e.printStackTrace();

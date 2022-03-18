@@ -9,8 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
+
 
 @WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
@@ -24,13 +25,15 @@ public class LoginServlet extends HttpServlet {
         User user = userManager.getByEmailAndPassword(login, password);
 
         if(userManager.getByEmailAndPassword(login, password) != null) {
+            HttpSession session = req.getSession();
+            session.setAttribute("user", user);
             if(user.getType() == Type.MANAGER) {
-                req.getRequestDispatcher("/managerHome").forward(req, resp);
+                resp.sendRedirect("/managerHome");
             } else if(user.getType() == Type.USER) {
-                req.setAttribute("user", user);
-                req.getRequestDispatcher("/userHome").forward(req, resp);
+                resp.sendRedirect("/userHome");
             }
-
+        } else {
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
 
     }
