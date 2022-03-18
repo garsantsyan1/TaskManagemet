@@ -1,4 +1,4 @@
-package model.manager;
+package manager;
 
 import db.DBConnectionProvider;
 import model.Type;
