@@ -1,4 +1,4 @@
-package manager;
+package model.manager;
 
 import db.DBConnectionProvider;
 import model.Status;

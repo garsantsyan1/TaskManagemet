@@ -1,6 +1,6 @@
 package servlet;
 
-import manager.UserManager;
+import model.manager.UserManager;
 import model.Type;
 import model.User;
 

@@ -1,7 +1,6 @@
 package servlet;
 
-import com.mysql.cj.Constants;
-import manager.UserManager;
+import model.manager.UserManager;
 import model.Type;
 import model.User;
 

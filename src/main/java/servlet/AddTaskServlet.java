@@ -1,6 +1,6 @@
 package servlet;
 
-import manager.TaskManager;
+import model.manager.TaskManager;
 import model.Status;
 import model.Task;
 

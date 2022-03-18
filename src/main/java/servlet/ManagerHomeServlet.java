@@ -1,8 +1,8 @@
 package servlet;
 
 
-import manager.TaskManager;
-import manager.UserManager;
+import model.manager.TaskManager;
+import model.manager.UserManager;
 import model.Task;
 import model.User;
 
